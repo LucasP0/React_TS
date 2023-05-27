@@ -7,10 +7,12 @@ import styles from './TaskList.module.css';
 
 
 export interface ITaskListProps {
-  taskList: ITask[]
+  taskList: ITask[];
+  handleDelete(id: number): void;
+  handleEdit(task: ITask): void;
 }
 
-export const TaskList = ({taskList}: ITaskListProps) => {
+export const TaskList = ({ taskList, handleDelete, handleEdit }: ITaskListProps) => {
   return (
     <>
     {taskList.length > 0 ? (
@@ -21,8 +23,8 @@ export const TaskList = ({taskList}: ITaskListProps) => {
           <p>Dificuldade: {task.dificuldade} </p>
           </div> 
           <div className={styles.actions}>
-            <i className='bi bi-pencil'></i>
-            <i className='bi  bi-trash'></i>
+            <i className='bi bi-pencil' onClick={() => handleEdit(task)}></i>
+            <i className='bi  bi-trash' onClick={() => {handleDelete(task.id)}}></i>
           </div>
         </div>
       ))

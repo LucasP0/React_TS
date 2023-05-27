@@ -10,28 +10,42 @@ export interface ITaskFormProps {
   btnText: string;
   taskList: ITask[];
   setTaskList?: React.Dispatch<React.SetStateAction<ITask[]>>
+  task?: ITask | null;
+  handleUpdate?(id: number, title: string, dificuldade: number): void;
 }
 
 
-export const TaskForm = ({ btnText, taskList, setTaskList }:ITaskFormProps) => {
+export const TaskForm = ({ btnText, taskList, setTaskList, task, handleUpdate }:ITaskFormProps) => {
 
   const [id, setId] = useState<number>(0);
   const [title, setTitle] = useState<string>('');
   const [dificuldade, setDificuldade] = useState<number>(0);
 
+  useEffect(() => {
+    if(task) {
+      setId(task.id);
+      setTitle(task.title);
+      setDificuldade(task.dificuldade);
+    }
+  }, [task]);
+
   const addTaskHandler = (e: FormEvent<HTMLFormElement>) => {
   e.preventDefault();
 
-  const id = Math.floor(Math.random() * 1000)
+  if(handleUpdate) {
+    handleUpdate(id, title, dificuldade);
 
-  const newTask: ITask = {id, title, dificuldade}
+  } else {
+    const id = Math.floor(Math.random() * 1000)
 
-  setTaskList!([...taskList, newTask])
+    const newTask: ITask = {id, title, dificuldade}
+  
+    setTaskList!([...taskList, newTask])
+  
+    setTitle("");
+    setDificuldade(0);
+  }
 
-  setTitle("");
-  setDificuldade(0);
-
-  console.log(taskList);
   }
   
   const handleChange = (e:ChangeEvent<HTMLInputElement>) => {
